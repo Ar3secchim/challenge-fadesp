@@ -1,9 +1,16 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: postgres
+    container_name: postgres_pagamentos
+    restart: always
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: pagamentos
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
     ports:
-      - '5432'
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
