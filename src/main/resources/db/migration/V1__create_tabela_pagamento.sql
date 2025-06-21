@@ -9,18 +9,21 @@ CREATE TYPE metodo_pagamento_enum AS ENUM (
     );
 
 CREATE TYPE status_pagamento_enum AS ENUM (
-    'PENDENTE',
-    'SUCESSO',
-    'FALHA'
+    'PENDENTE_PROCESSAMENTO',
+    'PROCESSADO_SUCESSO',
+    'PROCESSADO_FALHA'
 );
 
 -- Criação da tabela de pagamento
 CREATE TABLE IF NOT EXISTS pagamentos.pagamento (
-     id SERIAL PRIMARY KEY,
-     codigo_debito INTEGER NOT NULL,
-     indentificador_pagamento VARCHAR(20) NOT NULL,
-     metodo_pagamento metodo_pagamento_enum NOT NULL,
-     numero_cartao VARCHAR(30),
-     valor_pagamento NUMERIC(12, 2) NOT NULL,
-     status status_pagamento_enum NOT NULL
+                                                    id                      BIGINT PRIMARY KEY,
+                                                    codigo_debito           INT                   NOT NULL,
+                                                    identificador_pagamento VARCHAR(20)           NOT NULL,
+                                                    metodo_pagamento        metodo_pagamento_enum NOT NULL,
+                                                    numero_cartao           VARCHAR(20),
+                                                    valor_pagamento         DECIMAL(10, 2)        NOT NULL,
+                                                    status                  status_pagamento_enum NOT NULL,
+                                                    ativo                   BOOLEAN               NOT NULL DEFAULT TRUE,
+                                                    data_criacao            TIMESTAMP             NOT NULL,
+                                                    data_atualizacao        TIMESTAMP
 );
