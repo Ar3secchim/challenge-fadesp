@@ -4,6 +4,7 @@ import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.model.MetodoPagamento;
 import com.challenge_fadesp.model.Pagamento;
+import com.challenge_fadesp.model.StatusPagamento;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,6 +16,7 @@ public class PagamentoMapper {
       .metodoPagamento(
         MetodoPagamento.valueOf(requestDTO.getMetodoPagamento().toString().toUpperCase())
       )
+      .statusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO)
       .numeroCartao(requestDTO.getNumeroCartao())
       .valorPagamento(requestDTO.getValorPagamento())
       .build();

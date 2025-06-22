@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * e timestamps de criação e atualização.
  */
 @Entity
-@Table(name = "pagamento", schema = "pagamentos")
+@Table(name = "pagamento")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class Pagamento {
   private String identificadorPagamento;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "metodo_pagamento", nullable = false, columnDefinition = "pagamentos.metodo_pagamento_enum")
+  @Column(name = "metodo_pagamento", nullable = false)
   private MetodoPagamento metodoPagamento;
 
   @Column(name = "numero_cartao")
@@ -40,7 +40,7 @@ public class Pagamento {
   private BigDecimal valorPagamento;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "status", nullable = false, columnDefinition = "pagamentos.status_pagamento_enum")
+  @Column(name = "status_pagamento", nullable = false)
   private StatusPagamento statusPagamento;
 
   @Column(name = "ativo", nullable = false)
