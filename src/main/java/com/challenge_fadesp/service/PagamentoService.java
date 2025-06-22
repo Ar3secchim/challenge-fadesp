@@ -29,7 +29,6 @@ public class PagamentoService {
     Pagamento pagamento = pagamentoMapper.toEntity(requestDTO);
     pagamento.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
     pagamento.setAtivo(true);
-    pagamento.setMetodoPagamento(MetodoPagamento.CARTAO_CREDITO);
 
     Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
     return pagamentoMapper.toResponseDTO(pagamentoSalvo);
@@ -45,7 +44,15 @@ public class PagamentoService {
     Integer codigoDebito, String identificadorPagamento, StatusPagamento statusPagamento) {
     List<Pagamento> pagamentos;
 
-    pagamentos = getPagamentos(codigoDebito, identificadorPagamento, statusPagamento);
+    if (codigoDebito != null) {
+      pagamentos = pagamentoRepository.findByCodigoDebito(codigoDebito).stream().collect(Collectors.toList());
+    } else if (identificadorPagamento != null && !identificadorPagamento.isEmpty()) {
+      pagamentos = pagamentoRepository.findByIdentificadorPagamento(identificadorPagamento);
+    } else if (statusPagamento != null) {
+      pagamentos = pagamentoRepository.findByStatusPagamento(statusPagamento);
+    } else {
+      pagamentos = pagamentoRepository.findAll();
+    }
 
     return pagamentos.stream()
       .map(pagamentoMapper::toResponseDTO)
@@ -61,6 +68,10 @@ public class PagamentoService {
   public PagamentoResponseDTO atualizarStatus(Long id, StatusPagamento novoStatus) {
     Pagamento pagamento = pagamentoRepository.findById(id)
       .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado com ID: " + id));
+
+    if (!pagamento.getAtivo()) {
+      throw new IllegalStateException("Pagamentos inativos não podem ter seu status alterado");
+    }
 
     switch (pagamento.getStatusPagamento()) {
       case PENDENTE_PROCESSAMENTO:
@@ -95,20 +106,5 @@ public class PagamentoService {
 
     pagamento.setAtivo(false);
     return pagamentoMapper.toResponseDTO(pagamentoRepository.save(pagamento));
-  }
-
-  private List<Pagamento> getPagamentos(Integer codigoDebito, String identificadorPagamento, StatusPagamento statusPagamento) {
-    List<Pagamento> pagamentos;
-
-    if (codigoDebito != null) {
-      pagamentos = pagamentoRepository.findByCodigoDebito(codigoDebito).stream().collect(Collectors.toList());
-    } else if (identificadorPagamento != null && !identificadorPagamento.isEmpty()) {
-      pagamentos = pagamentoRepository.findByIdentificadorPagamento(identificadorPagamento);
-    } else if (statusPagamento != null) {
-      pagamentos = pagamentoRepository.findByStatusPagamento(statusPagamento);
-    } else {
-      pagamentos = pagamentoRepository.findAll();
-    }
-    return pagamentos;
   }
 }

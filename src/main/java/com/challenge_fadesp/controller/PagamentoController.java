@@ -29,8 +29,8 @@ public class PagamentoController {
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
   }
 
-  @GetMapping
-  public ResponseEntity<List<PagamentoResponseDTO>> listarPagamentos(
+  @GetMapping("/filtrar-pagamentos")
+  public ResponseEntity<List<PagamentoResponseDTO>> filtrarPagamentos(
     @RequestParam(required = false) Integer codigoDebito,
     @RequestParam(required = false) String identificadorPagamento,
     @RequestParam(required = false) StatusPagamento statusPagamento) {
@@ -39,6 +39,13 @@ public class PagamentoController {
       codigoDebito, identificadorPagamento, statusPagamento);
     return ResponseEntity.ok(pagamentos);
   }
+
+  @GetMapping()
+  public ResponseEntity<List<PagamentoResponseDTO>> listarPagamentos() {
+    List<PagamentoResponseDTO> listaPagamentos = pagamentoService.listarPagamentos();
+    return ResponseEntity.ok(listaPagamentos);
+  }
+
 
   @GetMapping("/{id}")
   public ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(@PathVariable Long id) {
@@ -54,7 +61,7 @@ public class PagamentoController {
     return ResponseEntity.ok(pagamento);
   }
 
-  @DeleteMapping("/{id}")
+  @PatchMapping("/{id}")
   public ResponseEntity<PagamentoResponseDTO> desativarPagamento(@PathVariable Long id) {
     PagamentoResponseDTO pagamento = pagamentoService.desativarPagamento(id);
     return ResponseEntity.ok(pagamento);
