@@ -30,7 +30,7 @@ public class Pagamento {
   private String identificadorPagamento;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "metodo_pagamento", nullable = false)
+  @Column(name = "metodo_pagamento", nullable = false, columnDefinition = "pagamentos.metodo_pagamento_enum")
   private MetodoPagamento metodoPagamento;
 
   @Column(name = "numero_cartao")
@@ -40,7 +40,7 @@ public class Pagamento {
   private BigDecimal valorPagamento;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "status", nullable = false)
+  @Column(name = "status", nullable = false, columnDefinition = "pagamentos.status_pagamento_enum")
   private StatusPagamento statusPagamento;
 
   @Column(name = "ativo", nullable = false)

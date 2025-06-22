@@ -3,6 +3,7 @@ package com.challenge_fadesp.service;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.mapper.PagamentoMapper;
+import com.challenge_fadesp.model.MetodoPagamento;
 import com.challenge_fadesp.model.Pagamento;
 import com.challenge_fadesp.model.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
@@ -28,6 +29,7 @@ public class PagamentoService {
     Pagamento pagamento = pagamentoMapper.toEntity(requestDTO);
     pagamento.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
     pagamento.setAtivo(true);
+    pagamento.setMetodoPagamento(MetodoPagamento.CARTAO_CREDITO);
 
     Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
     return pagamentoMapper.toResponseDTO(pagamentoSalvo);
@@ -97,6 +99,7 @@ public class PagamentoService {
 
   private List<Pagamento> getPagamentos(Integer codigoDebito, String identificadorPagamento, StatusPagamento statusPagamento) {
     List<Pagamento> pagamentos;
+
     if (codigoDebito != null) {
       pagamentos = pagamentoRepository.findByCodigoDebito(codigoDebito).stream().collect(Collectors.toList());
     } else if (identificadorPagamento != null && !identificadorPagamento.isEmpty()) {

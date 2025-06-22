@@ -1,5 +1,6 @@
 package com.challenge_fadesp.controller;
 
+import com.challenge_fadesp.dtos.AtualizarStatusDTO;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.model.StatusPagamento;
@@ -48,7 +49,7 @@ public class PagamentoController {
   @PatchMapping("/{id}/status")
   public ResponseEntity<PagamentoResponseDTO> atualizarStatusPagamento(
     @PathVariable Long id,
-    @RequestBody AtualizacaoStatusDTO atualizacaoStatusDTO) {
+    @RequestBody AtualizarStatusDTO atualizacaoStatusDTO) {
     PagamentoResponseDTO pagamento = pagamentoService.atualizarStatus(id, atualizacaoStatusDTO.getStatusPagamento());
     return ResponseEntity.ok(pagamento);
   }
