@@ -2,9 +2,9 @@ package com.challenge_fadesp.mapper;
 
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
-import com.challenge_fadesp.model.MetodoPagamento;
-import com.challenge_fadesp.model.Pagamento;
-import com.challenge_fadesp.model.StatusPagamento;
+import com.challenge_fadesp.model.enums.MetodoPagamento;
+import com.challenge_fadesp.model.entity.Pagamento;
+import com.challenge_fadesp.model.enums.StatusPagamento;
 import org.springframework.stereotype.Component;
 
 @Component

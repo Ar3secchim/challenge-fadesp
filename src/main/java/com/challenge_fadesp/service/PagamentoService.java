@@ -2,10 +2,12 @@ package com.challenge_fadesp.service;
 
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
+import com.challenge_fadesp.exception.pagamentos.OperacaoInvalidaException;
+import com.challenge_fadesp.exception.pagamentos.PagamentoNaoEncontradoException;
+import com.challenge_fadesp.exception.pagamentos.StatusInvalidoException;
 import com.challenge_fadesp.mapper.PagamentoMapper;
-import com.challenge_fadesp.model.MetodoPagamento;
-import com.challenge_fadesp.model.Pagamento;
-import com.challenge_fadesp.model.StatusPagamento;
+import com.challenge_fadesp.model.entity.Pagamento;
+import com.challenge_fadesp.model.enums.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,16 +63,16 @@ public class PagamentoService {
 
   public PagamentoResponseDTO buscarPorId(Long id) {
     Pagamento pagamento = pagamentoRepository.findById(id)
-      .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado com ID: " + id));
+      .orElseThrow(() -> new PagamentoNaoEncontradoException("Pagamento não encontrado"));
     return pagamentoMapper.toResponseDTO(pagamento);
   }
 
   public PagamentoResponseDTO atualizarStatus(Long id, StatusPagamento novoStatus) {
     Pagamento pagamento = pagamentoRepository.findById(id)
-      .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado com ID: " + id));
+      .orElseThrow(() -> new PagamentoNaoEncontradoException("Pagamento não encontrado"));
 
     if (!pagamento.getAtivo()) {
-      throw new IllegalStateException("Pagamentos inativos não podem ter seu status alterado");
+      throw new OperacaoInvalidaException("Pagamentos inativos não podem ter seu status alterado");
     }
 
     switch (pagamento.getStatusPagamento()) {
@@ -79,16 +81,16 @@ public class PagamentoService {
           novoStatus == StatusPagamento.PROCESSADO_FALHA) {
           pagamento.setStatusPagamento(novoStatus);
         } else {
-          throw new IllegalStateException("Um pagamento pendente só pode ser alterado para processado com sucesso ou falha");
+          throw new StatusInvalidoException("Um pagamento pendente só pode ser alterado para processado com sucesso ou falha");
         }
         break;
       case PROCESSADO_SUCESSO:
-        throw new IllegalStateException("Um pagamento processado com sucesso não pode ter seu status alterado");
+        throw new StatusInvalidoException("Um pagamento processado com sucesso não pode ter seu status alterado");
       case PROCESSADO_FALHA:
         if (novoStatus == StatusPagamento.PENDENTE_PROCESSAMENTO) {
           pagamento.setStatusPagamento(novoStatus);
         } else {
-          throw new IllegalStateException("Um pagamento processado com falha só pode ser alterado para pendente");
+          throw new StatusInvalidoException("Um pagamento processado com falha só pode ser alterado para pendente");
         }
         break;
     }
@@ -98,10 +100,10 @@ public class PagamentoService {
 
   public PagamentoResponseDTO desativarPagamento(Long id) {
     Pagamento pagamento = pagamentoRepository.findById(id)
-      .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado com ID: " + id));
+      .orElseThrow(() -> new PagamentoNaoEncontradoException("Pagamento não encontrado"));
 
     if (pagamento.getStatusPagamento() != StatusPagamento.PENDENTE_PROCESSAMENTO) {
-      throw new IllegalStateException("Apenas pagamentos pendentes podem ser desativados");
+      throw new OperacaoInvalidaException("Apenas pagamentos pendentes podem ser desativados");
     }
 
     pagamento.setAtivo(false);

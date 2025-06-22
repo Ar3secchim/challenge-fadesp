@@ -1,6 +1,6 @@
 package com.challenge_fadesp.dtos;
 
-import com.challenge_fadesp.model.StatusPagamento;
+import com.challenge_fadesp.model.enums.StatusPagamento;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

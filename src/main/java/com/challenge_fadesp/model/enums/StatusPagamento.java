@@ -1,4 +1,4 @@
-package com.challenge_fadesp.model;
+package com.challenge_fadesp.model.enums;
 
 public enum StatusPagamento {
   PENDENTE_PROCESSAMENTO,
