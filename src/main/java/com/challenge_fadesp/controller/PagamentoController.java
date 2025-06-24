@@ -4,7 +4,7 @@ import com.challenge_fadesp.dtos.AtualizarStatusDTO;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.model.enums.StatusPagamento;
-import com.challenge_fadesp.service.PagamentoService;
+import com.challenge_fadesp.services.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
