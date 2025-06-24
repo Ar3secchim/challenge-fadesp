@@ -18,14 +18,17 @@ O projeto visa atender a um desafio técnico de backend, focado na criação de 
 `ADR 001`
 
 **Justificativa:**
-Spring Boot fornece uma base robusta para desenvolvimento de APIs RESTful, com integração facilitada a bancos de dados, validação de dados, segurança e testes. A escolha da versão 17 do Java garante compatibilidade com recursos modernos e maior longevidade do código.
+Spring Boot fornece uma base robusta para desenvolvimento de APIs REST, com integração facilitada a bancos de dados,
+validação de dados, segurança e testes. A escolha da versão 17 do Java garante compatibilidade com recursos modernos e
+maior longevidade do código.
 
-### Banco de Dados: PostgreSQL via Docker
-
+### H2 Database para Desenvolvimento
 `ADR 002`
 
-**Justificativa:**
-PostgreSQL é um banco relacional robusto, com suporte completo a transações, integridade referencial e extensibilidade. Utilizá-lo via Docker simplifica o setup local e garante ambiente de testes reproduzível.
+**Justificativa:** : H2 é um banco de dados leve e em memória, ideal para desenvolvimento e testes rápidos, foi o
+recomendado pelo teste. Ele permite iniciar o projeto sem a necessidade de configurar um banco de dados externo,
+facilitando o setup inicial. No entanto, para produção, recomenda-se o uso de um banco de dados relacional mais robusto
+como PostgreSQL ou MySQL.
 
 ### Camadas do Projeto
 

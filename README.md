@@ -46,70 +46,25 @@ src/
 
 ## ▶️ Rodando o Projeto Localmente
 
-### Script automatizado (Linux/Mac)
 
-Você pode usar o seguinte script para subir o banco, aplicar as migrations e levantar a aplicação automaticamente:
-```bash
-./scripts/start.sh
-```
-> O script está localizado na pasta `/scripts`
-
-O servidor ficará disponível em `http://localhost:8080`
-
-### Script automatizado (Windows)
-
-> Para executar, basta dar dois cliques no arquivo `init.bat` ou rodar via terminal.
-
-> O script está localizado na pasta `/scripts`
-
-O servidor ficará disponível em `http://localhost:8080`
-
-## ▶️ Caso prefira sem scripts
-### Pré-requisitos:
-
-* Docker instalado
-* Java instalado 
-
-#### 🐳 Executando com Docker
-
-### Subir o banco PostgreSQL:
-
-```bash
-docker-compose up -d
-```
-
-> Isso criará o banco `payments` e executará as migrations iniciais via Flyway.
-
----
-
-### Gerar a imagem da aplicação
-
-Para criar a imagem da aplicação e executá-la junto com o banco, use:
-
-```bash
-docker build -t pagamentos-api .
-docker run --name pagamentos-api-container -p 8080:8080 --network="host" pagamentos-api
-```
-
-> A imagem será construída com o nome `pagamentos-api`, e a aplicação ficará disponível em `http://localhost:8080`.
 
 ---
 
 ## 🔎 Endpoints Principais
 
-| Método | Rota                      | Descrição                           |
-| ------ | ------------------------- | ----------------------------------- |
-| POST   | `/pagamentos`             | Criar novo pagamento                |
-| PATCH  | `/pagamentos/{id}/status` | Atualizar status do pagamento       |
-| GET    | `/pagamentos`             | Listar pagamentos com filtros       |
-| DELETE | `/pagamentos/{id}`        | Exclusão lógica (se ainda pendente) |
+| Método | Rota                      | Descrição                          |
+|--------|---------------------------|------------------------------------|
+| POST   | `/pagamentos`             | Criar novo pagamento               |
+| PATCH  | `/pagamentos/{id}/status` | Atualizar status do pagamento      |
+| POST   | `/pagamentos/filtro`      | Listar pagamentos com filtros      |
+| PATCH  | `/pagamentos/{id}`        | Desativar pagamento (regra lógica) |
 
 ### 📥 Exemplo de payload para criação de pagamento (POST `/pagamentos`)
 
 ```json
 {
   "codigoDebito": 12345,
-  "cpfCnpj": "12345678909",
+  "identificadorPagamento": "12345678909",
   "metodoPagamento": "CARTAO_CREDITO",
   "numeroCartao": "4111111111111111",
   "valor": 150.75
@@ -135,12 +90,12 @@ docker run --name pagamentos-api-container -p 8080:8080 --network="host" pagamen
 Todas as decisões arquiteturais estão documentadas na pasta `docs/ADRS`:
 
 * `ADR-001`: Spring Boot com Java 17
-* `ADR-002`: PostgreSQL via Docker
+* `ADR-002`: PostgreSQL via Docker (ultrapassada a decisão de usar H2 -> ADR-007)
 * `ADR-003`: Estrutura em Camadas
 * `ADR-004`: Spring Data JPA
 * `ADR-005`: Lombok
 * `ADR-006`: Flyway
-
+* `ADR-007`: Banco de Dados H2
 ---
 
 ### 📚 Documentação Swagger
