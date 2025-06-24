@@ -4,11 +4,11 @@ import com.challenge_fadesp.dtos.AtualizarStatusDTO;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.model.enums.StatusPagamento;
-import com.challenge_fadesp.services.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.challenge_fadesp.services.pagamento.usecase.*;
 
 import java.util.List;
 
@@ -16,16 +16,30 @@ import java.util.List;
 @RequestMapping("api/pagamentos")
 public class PagamentoController {
 
-  private final PagamentoService pagamentoService;
+  private final CriarPagamentoUseCase criarPagamentoUseCase;
+  private final ListarPagamentosUseCase listarPagamentosUseCase;
+  private final BuscarPagamentoPorIdUseCase buscarPagamentoUseCase;
+  private final AtualizarStatusPagamentoUseCase atualizarStatusUseCase;
+  private final DesativarPagamentoUseCase desativarPagamentoUseCase;
+
 
   @Autowired
-  public PagamentoController(PagamentoService pagamentoService) {
-    this.pagamentoService = pagamentoService;
+  public PagamentoController(
+    CriarPagamentoUseCase criarPagamentoUseCase,
+    ListarPagamentosUseCase listarPagamentosUseCase,
+    BuscarPagamentoUseCase buscarPagamentoUseCase,
+    AtualizarStatusPagamentoUseCase atualizarStatusUseCase,
+    DesativarPagamentoUseCase desativarPagamentoUseCase) {
+    this.criarPagamentoUseCase = criarPagamentoUseCase;
+    this.listarPagamentosUseCase = listarPagamentosUseCase;
+    this.buscarPagamentoUseCase = buscarPagamentoUseCase;
+    this.atualizarStatusUseCase = atualizarStatusUseCase;
+    this.desativarPagamentoUseCase = desativarPagamentoUseCase;
   }
 
   @PostMapping
   public ResponseEntity<PagamentoResponseDTO> criarPagamento(@RequestBody PagamentoRequestDTO requestDTO) {
-    PagamentoResponseDTO responseDTO = pagamentoService.criarPagamento(requestDTO);
+    PagamentoResponseDTO responseDTO = criarPagamentoUseCase.execute(requestDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
   }
 
@@ -35,35 +49,34 @@ public class PagamentoController {
     @RequestParam(required = false) String identificadorPagamento,
     @RequestParam(required = false) StatusPagamento statusPagamento) {
 
-    List<PagamentoResponseDTO> pagamentos = pagamentoService.listarPagamentosFiltrados(
-      codigoDebito, identificadorPagamento, statusPagamento);
+    List<PagamentoResponseDTO> pagamentos = listarPagamentosUseCase.filtrar(codigoDebito, identificadorPagamento, statusPagamento);
     return ResponseEntity.ok(pagamentos);
   }
 
   @GetMapping()
   public ResponseEntity<List<PagamentoResponseDTO>> listarPagamentos() {
-    List<PagamentoResponseDTO> listaPagamentos = pagamentoService.listarPagamentos();
+    List<PagamentoResponseDTO> listaPagamentos = listarPagamentosUseCase.listarTodos();
     return ResponseEntity.ok(listaPagamentos);
   }
 
 
   @GetMapping("/{id}")
   public ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(@PathVariable Long id) {
-    PagamentoResponseDTO pagamento = pagamentoService.buscarPorId(id);
+    PagamentoResponseDTO pagamento = buscarPagamentoUseCase.execute(id);
     return ResponseEntity.ok(pagamento);
   }
 
   @PatchMapping("/{id}/status")
   public ResponseEntity<PagamentoResponseDTO> atualizarStatusPagamento(
     @PathVariable Long id,
-    @RequestBody AtualizarStatusDTO atualizacaoStatusDTO) {
-    PagamentoResponseDTO pagamento = pagamentoService.atualizarStatus(id, atualizacaoStatusDTO.getStatusPagamento());
+    @RequestBody StatusPagamentoRequest request) {
+    PagamentoResponseDTO pagamento = atualizarStatusUseCase.execute(id, request.getStatus());
     return ResponseEntity.ok(pagamento);
   }
 
   @PatchMapping("/{id}")
   public ResponseEntity<PagamentoResponseDTO> desativarPagamento(@PathVariable Long id) {
-    PagamentoResponseDTO pagamento = pagamentoService.desativarPagamento(id);
+    PagamentoResponseDTO pagamento = desativarPagamentoUseCase.execute(id);
     return ResponseEntity.ok(pagamento);
   }
 }
