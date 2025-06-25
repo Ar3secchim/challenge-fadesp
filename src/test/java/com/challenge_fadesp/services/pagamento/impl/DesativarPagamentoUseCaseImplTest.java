@@ -1,5 +1,6 @@
 package com.challenge_fadesp.services.pagamento.impl;
 
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.exception.pagamentos.OperacaoInvalidaException;
 import com.challenge_fadesp.exception.pagamentos.PagamentoNaoEncontradoException;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,9 +26,6 @@ import static org.mockito.Mockito.when;
 class DesativarPagamentoUseCaseImplTest {
   @Mock
   private PagamentoRepository pagamentoRepository;
-
-  @Mock
-  private PagamentoMapper pagamentoMapper;
 
   @InjectMocks
   private DesativarPagamentoUseCaseImpl desativarPagamentoUseCase;
@@ -41,21 +40,28 @@ class DesativarPagamentoUseCaseImplTest {
     pagamento.setAtivo(true);
     pagamento.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
 
-    responseDTO = new PagamentoResponseDTO();
+    responseDTO = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
   }
 
   @Test
   void deveDesativarPagamentoComSucesso() {
     when(pagamentoRepository.findById(1L)).thenReturn(Optional.of(pagamento));
     when(pagamentoRepository.save(pagamento)).thenReturn(pagamento);
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     PagamentoResponseDTO resultado = desativarPagamentoUseCase.execute(1L);
 
     assertNotNull(resultado);
     assertFalse(pagamento.getAtivo());
     verify(pagamentoRepository).save(pagamento);
-    verify(pagamentoMapper).toResponseDTO(pagamento);
   }
 
   @Test

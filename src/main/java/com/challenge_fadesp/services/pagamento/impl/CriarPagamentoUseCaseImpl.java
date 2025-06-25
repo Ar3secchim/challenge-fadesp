@@ -31,25 +31,25 @@ public class CriarPagamentoUseCaseImpl implements CriarPagamentoUseCase {
       throw new OperacaoInvalidaException("Pagamento não pode ser nulo");
     }
 
-    if (requestDTO.getValorPagamento() == null || requestDTO.getValorPagamento().compareTo(BigDecimal.ZERO) <= 0) {
+    if (requestDTO.valorPagamento() == null || requestDTO.valorPagamento().compareTo(BigDecimal.ZERO) <= 0) {
       throw new OperacaoInvalidaException("Valor do pagamento deve ser maior que zero");
     }
 
-    if (requestDTO.getMetodoPagamento() == null) {
+    if (requestDTO.metodoPagamento() == null) {
       throw new OperacaoInvalidaException("Método de pagamento não pode ser nulo ou vazio");
     }
 
-    if (requestDTO.getIdentificadorPagamento() == null) {
+    if (requestDTO.identificadorPagamento() == null) {
       throw new OperacaoInvalidaException("Identificador do pagamento não pode ser nulo ou vazio");
     }
 
     // Verifica se o identificador de pagamento é um número de 11 ou 14 dígitos
-    if (!(requestDTO.getIdentificadorPagamento().matches("\\d{11}") || requestDTO.getIdentificadorPagamento().matches("\\d{14}"))) {
+    if (!(requestDTO.identificadorPagamento().matches("\\d{11}") || requestDTO.identificadorPagamento().matches("\\d{14}"))) {
       throw new OperacaoInvalidaException("Identificador do pagamento inválido. Deve conter 11 ou 14 dígitos.");
     }
 
-    if (requestDTO.getMetodoPagamento() == MetodoPagamento.CARTAO_DEBITO || requestDTO.getMetodoPagamento() == MetodoPagamento.CARTAO_CREDITO) {
-      if (requestDTO.getNumeroCartao() == null || requestDTO.getNumeroCartao().isBlank()) {
+    if (requestDTO.metodoPagamento() == MetodoPagamento.CARTAO_DEBITO || requestDTO.metodoPagamento() == MetodoPagamento.CARTAO_CREDITO) {
+      if (requestDTO.numeroCartao() == null || requestDTO.numeroCartao().isBlank()) {
         throw new OperacaoInvalidaException("Número do cartão não pode ser nulo ou vazio para pagamentos com cartão");
       }
     }

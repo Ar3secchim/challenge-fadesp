@@ -1,5 +1,6 @@
 package com.challenge_fadesp.services.pagamento.impl;
 
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.exception.pagamentos.PagamentoNaoEncontradoException;
 import com.challenge_fadesp.utils.mapper.PagamentoMapper;
@@ -13,8 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.challenge_fadesp.utils.mapper.PagamentoMapper.toResponseDTO;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,8 +28,6 @@ class BuscarPagamentoPorIdUseCaseImplTest {
   @Mock
   private PagamentoRepository pagamentoRepository;
 
-  @Mock
-  private PagamentoMapper pagamentoMapper;
 
   @InjectMocks
   private BuscarPagamentoPorIdUseCaseImpl BuscarPagamentoPorIdUseCase;
@@ -39,22 +41,31 @@ class BuscarPagamentoPorIdUseCaseImplTest {
     pagamento.setId(1L);
     pagamento.setAtivo(true);
     pagamento.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
+    pagamento.setDataAtualizacao(LocalDateTime.now());
 
-    responseDTO = new PagamentoResponseDTO();
+    responseDTO = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
   }
 
   @Test
   void deveBuscarPagamentoPorIdComSucesso() {
     when(pagamentoRepository.findById(1L)).thenReturn(Optional.of(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     PagamentoResponseDTO resultado = BuscarPagamentoPorIdUseCase.execute(1L);
 
     assertNotNull(resultado);
-    assertEquals(responseDTO, resultado);
+    assertEquals(responseDTO.id(), resultado.id());
+    assertEquals(responseDTO.statusPagamento(), resultado.statusPagamento());
 
     verify(pagamentoRepository).findById(1L);
-    verify(pagamentoMapper).toResponseDTO(pagamento);
   }
 
   @Test

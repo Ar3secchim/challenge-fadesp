@@ -10,27 +10,27 @@ import org.springframework.stereotype.Component;
 public class PagamentoMapper {
   public static Pagamento toEntity(PagamentoRequestDTO requestDTO) {
     return Pagamento.builder()
-      .codigoDebito(requestDTO.getCodigoDebito())
-      .identificadorPagamento(requestDTO.getIdentificadorPagamento())
+      .codigoDebito(requestDTO.codigoDebito())
+      .identificadorPagamento(requestDTO.identificadorPagamento())
       .metodoPagamento(
-        MetodoPagamento.valueOf(requestDTO.getMetodoPagamento().toString().toUpperCase())
+        MetodoPagamento.valueOf(requestDTO.metodoPagamento().toString().toUpperCase())
       )
       .statusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO)
-      .numeroCartao(requestDTO.getNumeroCartao())
-      .valorPagamento(requestDTO.getValorPagamento())
+      .numeroCartao(requestDTO.numeroCartao())
+      .valorPagamento(requestDTO.valorPagamento())
       .build();
   }
 
   public static PagamentoResponseDTO toResponseDTO(Pagamento pagamento) {
-    return  PagamentoResponseDTO.builder()
-      .id(pagamento.getId())
-      .codigoDebito(pagamento.getCodigoDebito())
-      .identificadorPagamento(pagamento.getIdentificadorPagamento())
-      .metodoPagamento(pagamento.getMetodoPagamento())
-      .numeroCartao(pagamento.getNumeroCartao())
-      .valorPagamento(pagamento.getValorPagamento())
-      .statusPagamento(pagamento.getStatusPagamento())
-      .ativo(pagamento.getAtivo())
-      .build();
+    return  new  PagamentoResponseDTO(
+      pagamento.getId(),
+      pagamento.getCodigoDebito(),
+      pagamento.getIdentificadorPagamento(),
+      pagamento.getMetodoPagamento(),
+      pagamento.getNumeroCartao(),
+      pagamento.getValorPagamento(),
+      pagamento.getStatusPagamento(),
+      pagamento.getAtivo()
+    );
   }
 }

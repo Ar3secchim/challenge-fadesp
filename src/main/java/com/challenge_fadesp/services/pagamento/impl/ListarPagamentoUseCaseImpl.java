@@ -31,9 +31,9 @@ public class ListarPagamentoUseCaseImpl implements ListarPagamentosUseCase {
 
   @Override
   public List<PagamentoResponseDTO> filtrar(FiltrarPagamentoRequestDTO requestDTO) {
-    Integer codigoDebito = requestDTO.getCodigoDebito();
-    String identificadorPagamento = requestDTO.getIdentificadorPagamento();
-    StatusPagamento status = requestDTO.getStatusPagamento();
+    Integer codigoDebito = requestDTO.codigoDebito();
+    String identificadorPagamento = requestDTO.identificadorPagamento();
+    StatusPagamento status = requestDTO.statusPagamento();
 
     if (codigoDebito == null && identificadorPagamento == null && status == null) {
       return listarTodos();

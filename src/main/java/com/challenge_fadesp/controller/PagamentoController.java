@@ -9,7 +9,6 @@ import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.dtos.StatusPagamentoRequestDTO;
 import com.challenge_fadesp.domain.enums.StatusPagamento;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,6 @@ public class PagamentoController {
   private final CriarPagamentoUseCase criarPagamentoUseCase;
   private final DesativarPagamentoUseCase desativarPagamentoUseCase;
 
-  @Autowired
   public PagamentoController(
     CriarPagamentoUseCase criarPagamentoUseCase,
     ListarPagamentosUseCase listarPagamentosUseCase,
@@ -95,7 +93,7 @@ public class PagamentoController {
   public ResponseEntity<PagamentoResponseDTO> atualizarStatusPagamento(
     @PathVariable Long id,
     @RequestBody StatusPagamentoRequestDTO request) {
-    StatusPagamento novoStatus = StatusPagamento.valueOf(request.getStatusPagamento().toUpperCase());
+    StatusPagamento novoStatus = StatusPagamento.valueOf(request.statusPagamento().toString().toUpperCase());
     PagamentoResponseDTO pagamento = atualizarStatusUseCase.execute(id, novoStatus);
     return ResponseEntity.ok(pagamento);
   }

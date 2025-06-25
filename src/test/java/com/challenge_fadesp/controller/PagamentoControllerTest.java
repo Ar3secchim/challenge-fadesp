@@ -47,14 +47,25 @@ class PagamentoControllerTest {
 
   @Test
   void deveCriarPagamentoComSucesso() throws Exception {
-    PagamentoRequestDTO requestDTO = new PagamentoRequestDTO();
-    requestDTO.setCodigoDebito(123);
-    requestDTO.setIdentificadorPagamento("12345678900");
-    requestDTO.setMetodoPagamento(MetodoPagamento.PIX);
-    requestDTO.setValorPagamento(BigDecimal.valueOf(150.00));
+    PagamentoRequestDTO requestDTO = new PagamentoRequestDTO(
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00)
+    );
 
-    PagamentoResponseDTO response = new PagamentoResponseDTO();
-    response.setId(1L);
+
+    PagamentoResponseDTO response = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
 
     Mockito.when(criarPagamentoUseCase.execute(any())).thenReturn(response);
 
@@ -67,8 +78,16 @@ class PagamentoControllerTest {
 
   @Test
   void deveListarTodosPagamentos() throws Exception {
-    PagamentoResponseDTO response = new PagamentoResponseDTO();
-    response.setId(1L);
+    PagamentoResponseDTO response = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
 
     Mockito.when(listarPagamentosUseCase.listarTodos()).thenReturn(List.of(response));
 
@@ -79,13 +98,23 @@ class PagamentoControllerTest {
 
   @Test
   void deveFiltrarPagamentosComSucesso() throws Exception {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
-    filtro.setCodigoDebito(123);
-    filtro.setIdentificadorPagamento("12345678900");
-    filtro.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      123,
+      "123456789111",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
 
-    PagamentoResponseDTO response = new PagamentoResponseDTO();
-    response.setId(1L);
+    PagamentoResponseDTO response = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
+
 
     Mockito.when(listarPagamentosUseCase.filtrar(any())).thenReturn(List.of(response));
 
@@ -98,8 +127,17 @@ class PagamentoControllerTest {
 
   @Test
   void deveBuscarPagamentoPorId() throws Exception {
-    PagamentoResponseDTO response = new PagamentoResponseDTO();
-    response.setId(1L);
+    PagamentoResponseDTO response = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
+
 
     Mockito.when(buscarPagamentoUseCase.execute(1L)).thenReturn(response);
 
@@ -110,15 +148,25 @@ class PagamentoControllerTest {
 
   @Test
   void deveAtualizarStatusComSucesso() throws Exception {
-    StatusPagamentoRequestDTO statusDTO = new StatusPagamentoRequestDTO();
-    statusDTO.setStatusPagamento("PROCESSADO_SUCESSO");
+    StatusPagamentoRequestDTO statusDTO = new StatusPagamentoRequestDTO(
+      StatusPagamento.PROCESSADO_SUCESSO
+    );
 
-    PagamentoResponseDTO response = new PagamentoResponseDTO();
-    response.setId(1L);
+    PagamentoResponseDTO response = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PROCESSADO_SUCESSO,
+      true
+    );
+
 
     Mockito.when(atualizarStatusUseCase.execute(1L, StatusPagamento.PROCESSADO_SUCESSO)).thenReturn(response);
 
-    mockMvc.perform(patch("/api/pagamentos/1/status")
+    mockMvc.perform(put("/api/pagamentos/1/status")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(statusDTO)))
       .andExpect(status().isOk())
@@ -127,12 +175,20 @@ class PagamentoControllerTest {
 
   @Test
   void deveDesativarPagamento() throws Exception {
-    PagamentoResponseDTO response = new PagamentoResponseDTO();
-    response.setId(1L);
+    PagamentoResponseDTO response = new PagamentoResponseDTO(
+      1L,
+      123,
+      "123456789111",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00),
+      StatusPagamento.PENDENTE_PROCESSAMENTO,
+      true
+    );
 
     Mockito.when(desativarPagamentoUseCase.execute(1L)).thenReturn(response);
 
-    mockMvc.perform(patch("/api/pagamentos/1"))
+    mockMvc.perform(put("/api/pagamentos/1"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id").value(1L));
   }

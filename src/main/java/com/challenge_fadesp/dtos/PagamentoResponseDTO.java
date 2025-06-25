@@ -6,17 +6,13 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class PagamentoResponseDTO {
-  private Long id;
-  private Integer codigoDebito;
-  private String identificadorPagamento;
-  private MetodoPagamento metodoPagamento;
-  private String numeroCartao;
-  private BigDecimal valorPagamento;
-  private StatusPagamento statusPagamento;
-  private Boolean ativo;
-}
+public record PagamentoResponseDTO (
+   Long id,
+   Integer codigoDebito,
+   String identificadorPagamento,
+   MetodoPagamento metodoPagamento,
+   String numeroCartao,
+   BigDecimal valorPagamento,
+   StatusPagamento statusPagamento,
+   Boolean ativo
+){}

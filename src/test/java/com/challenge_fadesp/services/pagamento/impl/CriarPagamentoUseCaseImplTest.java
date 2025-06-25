@@ -26,8 +26,6 @@ class CriarPagamentoUseCaseImplTest {
   @Mock
   private PagamentoRepository pagamentoRepository;
 
-  @Mock
-  private PagamentoMapper pagamentoMapper;
 
   @InjectMocks
   private CriarPagamentoUseCaseImpl criarPagamentoUseCase;
@@ -38,29 +36,44 @@ class CriarPagamentoUseCaseImplTest {
 
   @BeforeEach
   void setUp() {
-    request = new PagamentoRequestDTO();
-    request.setCodigoDebito(123);
-    request.setIdentificadorPagamento("12345678900");
-    request.setMetodoPagamento(MetodoPagamento.PIX);
-    request.setValorPagamento(BigDecimal.valueOf(100));
+    request = new PagamentoRequestDTO(
+      1,
+      "1234567890123456",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.valueOf(150.00)
+    );
+
 
     pagamento = new Pagamento();
+    pagamento.setCodigoDebito(123);
+    pagamento.setIdentificadorPagamento("12345678900");
+    pagamento.setMetodoPagamento(MetodoPagamento.PIX);
+    pagamento.setValorPagamento(BigDecimal.valueOf(100));
+    pagamento.setNumeroCartao(null);
+    pagamento.setAtivo(true);
     pagamento.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
 
-    response = new PagamentoResponseDTO();
+    response = new PagamentoResponseDTO(
+      pagamento.getId(),
+      pagamento.getCodigoDebito(),
+      pagamento.getIdentificadorPagamento(),
+      pagamento.getMetodoPagamento(),
+      pagamento.getNumeroCartao(),
+      pagamento.getValorPagamento(),
+      pagamento.getStatusPagamento(),
+      pagamento.getAtivo()
+    );
   }
 
   @Test
   void deveCriarPagamentoComSucesso() {
-    when(pagamentoMapper.toEntity(request)).thenReturn(pagamento);
     when(pagamentoRepository.save(pagamento)).thenReturn(pagamento);
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(response);
 
     PagamentoResponseDTO resultado = criarPagamentoUseCase.execute(request);
 
     assertNotNull(resultado);
     verify(pagamentoRepository).save(pagamento);
-    verify(pagamentoMapper).toResponseDTO(pagamento);
   }
 
   @Test
@@ -70,26 +83,53 @@ class CriarPagamentoUseCaseImplTest {
 
   @Test
   void deveLancarExcecaoSeValorZeroOuNulo() {
-    request.setValorPagamento(BigDecimal.ZERO);
+    request = new PagamentoRequestDTO(
+      1,
+      "1234567890123456",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.ZERO
+    );
+
     assertThrows(OperacaoInvalidaException.class, () -> criarPagamentoUseCase.execute(request));
   }
 
   @Test
   void deveLancarExcecaoSeMetodoPagamentoForNulo() {
-    request.setMetodoPagamento(null);
+    request = new PagamentoRequestDTO(
+      1,
+      "1234567890123456",
+      null,
+      "1234567890123456",
+      BigDecimal.ZERO
+    );
+
     assertThrows(OperacaoInvalidaException.class, () -> criarPagamentoUseCase.execute(request));
   }
 
   @Test
   void deveLancarExcecaoSeIdentificadorInvalido() {
-    request.setIdentificadorPagamento("123");
+    request = new PagamentoRequestDTO(
+      1,
+      "a",
+      MetodoPagamento.PIX,
+      "1234567890123456",
+      BigDecimal.ZERO
+    );
+
     assertThrows(OperacaoInvalidaException.class, () -> criarPagamentoUseCase.execute(request));
   }
 
   @Test
   void deveLancarExcecaoSeCartaoNaoInformadoParaMetodoComCartao() {
-    request.setMetodoPagamento(MetodoPagamento.CARTAO_CREDITO);
-    request.setNumeroCartao(null);
+    request = new PagamentoRequestDTO(
+      1,
+      "1234567890123456",
+      MetodoPagamento.CARTAO_CREDITO,
+      null,
+      BigDecimal.ZERO
+    );
+
     assertThrows(OperacaoInvalidaException.class, () -> criarPagamentoUseCase.execute(request));
   }
 }

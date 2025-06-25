@@ -1,5 +1,6 @@
 package com.challenge_fadesp.services.pagamento.impl;
 
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
 import com.challenge_fadesp.dtos.FiltrarPagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.utils.mapper.PagamentoMapper;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,9 +28,6 @@ class ListarPagamentoUseCaseImplTest {
   @Mock
   private PagamentoRepository pagamentoRepository;
 
-  @Mock
-  private PagamentoMapper pagamentoMapper;
-
   @InjectMocks
   private ListarPagamentoUseCaseImpl listarPagamentoUseCase;
 
@@ -40,56 +39,68 @@ class ListarPagamentoUseCaseImplTest {
     pagamento = new Pagamento();
     pagamento.setId(1L);
 
-    responseDTO = new PagamentoResponseDTO();
+    responseDTO = new PagamentoResponseDTO(
+      pagamento.getId(),
+      pagamento.getCodigoDebito(),
+      pagamento.getIdentificadorPagamento(),
+      pagamento.getMetodoPagamento(),
+      pagamento.getNumeroCartao(),
+      pagamento.getValorPagamento(),
+      pagamento.getStatusPagamento(),
+      pagamento.getAtivo()
+    );
   }
 
   @Test
   void deveListarTodosPagamentos() {
     when(pagamentoRepository.findAll()).thenReturn(Collections.singletonList(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     List<PagamentoResponseDTO> resultado = listarPagamentoUseCase.listarTodos();
 
     assertEquals(1, resultado.size());
     verify(pagamentoRepository).findAll();
-    verify(pagamentoMapper).toResponseDTO(pagamento);
   }
 
   @Test
   void deveFiltrarPagamentosComCamposPreenchidos() {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
-    filtro.setCodigoDebito(123);
-    filtro.setIdentificadorPagamento("12345678900");
-    filtro.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      1,
+      "1234567891012",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
+
 
     when(pagamentoRepository.findAll(any(Specification.class))).thenReturn(List.of(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     List<PagamentoResponseDTO> resultado = listarPagamentoUseCase.filtrar(filtro);
 
     assertEquals(1, resultado.size());
     verify(pagamentoRepository).findAll(any(Specification.class));
-    verify(pagamentoMapper).toResponseDTO(pagamento);
   }
 
   @Test
   void deveRetornarTodosQuandoFiltroVazio() {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      1,
+      "1234567891012",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
 
     when(pagamentoRepository.findAll()).thenReturn(List.of(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     List<PagamentoResponseDTO> resultado = listarPagamentoUseCase.filtrar(filtro);
 
     assertEquals(1, resultado.size());
     verify(pagamentoRepository).findAll();
-    verify(pagamentoMapper).toResponseDTO(pagamento);
   }
 
   @Test
   void deveRetornarListaVaziaQuandoNenhumEncontrado() {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
-    filtro.setCodigoDebito(999);
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      1,
+      "1234567891012",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
 
     when(pagamentoRepository.findAll(any(Specification.class))).thenReturn(Collections.emptyList());
 
@@ -101,11 +112,13 @@ class ListarPagamentoUseCaseImplTest {
 
   @Test
   void deveFiltrarComApenasCodigoDebito() {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
-    filtro.setCodigoDebito(123);
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      1,
+      "1234567891012",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
 
     when(pagamentoRepository.findAll(any(Specification.class))).thenReturn(List.of(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     List<PagamentoResponseDTO> resultado = listarPagamentoUseCase.filtrar(filtro);
 
@@ -114,11 +127,14 @@ class ListarPagamentoUseCaseImplTest {
 
   @Test
   void deveFiltrarComApenasIdentificador() {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
-    filtro.setIdentificadorPagamento("12345678900");
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      1,
+      "1234567891012",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
+
 
     when(pagamentoRepository.findAll(any(Specification.class))).thenReturn(List.of(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     List<PagamentoResponseDTO> resultado = listarPagamentoUseCase.filtrar(filtro);
 
@@ -127,11 +143,13 @@ class ListarPagamentoUseCaseImplTest {
 
   @Test
   void deveFiltrarComApenasStatus() {
-    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO();
-    filtro.setStatusPagamento(StatusPagamento.PROCESSADO_SUCESSO);
+    FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
+      1,
+      "1234567891012",
+      StatusPagamento.PENDENTE_PROCESSAMENTO
+    );
 
     when(pagamentoRepository.findAll(any(Specification.class))).thenReturn(List.of(pagamento));
-    when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
     List<PagamentoResponseDTO> resultado = listarPagamentoUseCase.filtrar(filtro);
 
