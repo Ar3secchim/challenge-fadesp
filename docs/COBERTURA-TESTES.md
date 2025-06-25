@@ -17,14 +17,14 @@
 | Pacote                                         | Cobertura de Instruções | Cobertura de Branches | Status          |
 |------------------------------------------------|-------------------------|-----------------------|-----------------|
 | `com.challenge_fadesp.services.pagamento.impl` | 96%                     | 79%                   | ✅ Excelente     |
-| `com.challenge_fadesp.model.enums`             | 96%                     | n/a                   | ✅ Excelente     |
+| `com.challenge_fadesp.domain.enums`             | 96%                     | n/a                   | ✅ Excelente     |
 | `com.challenge_fadesp.exception.pagamentos`    | 100%                    | n/a                   | ✅ Perfeito      |
 | `com.challenge_fadesp.controller`              | 69%                     | n/a                   | ⚠️ Bom          |
 | `com.challenge_fadesp`                         | 37%                     | n/a                   | ⚠️ Médio        |
 | `com.challenge_fadesp.utils`                   | 34%                     | 0%                    | ❌ Baixo         |
 | `com.challenge_fadesp.exception`               | 7%                      | n/a                   | ❌ Muito Baixo   |
 | `com.challenge_fadesp.mapper`                  | 5%                      | n/a                   | ❌ Muito Baixo   |
-| `com.challenge_fadesp.model.entity`            | 0%                      | n/a                   | ❌ Sem Cobertura |
+| `com.challenge_fadesp.domain.entity`            | 0%                      | n/a                   | ❌ Sem Cobertura |
 
 ---
 

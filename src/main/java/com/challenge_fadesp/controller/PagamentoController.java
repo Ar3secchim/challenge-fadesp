@@ -8,7 +8,7 @@ import com.challenge_fadesp.dtos.FiltrarPagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.dtos.StatusPagamentoRequestDTO;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

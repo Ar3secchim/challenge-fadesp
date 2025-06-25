@@ -1,7 +1,4 @@
-package com.challenge_fadesp.model.enums;
-
-import com.challenge_fadesp.exception.pagamentos.StatusInvalidoException;
-import com.challenge_fadesp.model.entity.Pagamento;
+package com.challenge_fadesp.domain.enums;
 
 import java.util.Set;
 

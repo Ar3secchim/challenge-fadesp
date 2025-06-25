@@ -1,15 +1,14 @@
-package com.challenge_fadesp.mapper;
+package com.challenge_fadesp.utils.mapper;
 
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
-import com.challenge_fadesp.model.enums.MetodoPagamento;
-import com.challenge_fadesp.model.entity.Pagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
+import com.challenge_fadesp.domain.entity.Pagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import org.springframework.stereotype.Component;
 
-@Component
 public class PagamentoMapper {
-  public Pagamento toEntity(PagamentoRequestDTO requestDTO) {
+  public static Pagamento toEntity(PagamentoRequestDTO requestDTO) {
     return Pagamento.builder()
       .codigoDebito(requestDTO.getCodigoDebito())
       .identificadorPagamento(requestDTO.getIdentificadorPagamento())
@@ -22,8 +21,8 @@ public class PagamentoMapper {
       .build();
   }
 
-  public PagamentoResponseDTO toResponseDTO(Pagamento pagamento) {
-    return PagamentoResponseDTO.builder()
+  public static PagamentoResponseDTO toResponseDTO(Pagamento pagamento) {
+    return  PagamentoResponseDTO.builder()
       .id(pagamento.getId())
       .codigoDebito(pagamento.getCodigoDebito())
       .identificadorPagamento(pagamento.getIdentificadorPagamento())

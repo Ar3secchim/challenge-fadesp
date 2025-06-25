@@ -1,8 +1,8 @@
 package com.challenge_fadesp.controller;
 
 import com.challenge_fadesp.dtos.*;
-import com.challenge_fadesp.model.enums.MetodoPagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import com.challenge_fadesp.services.pagamento.usecase.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

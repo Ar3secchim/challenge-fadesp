@@ -3,25 +3,26 @@ package com.challenge_fadesp.services.pagamento.impl;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.exception.pagamentos.OperacaoInvalidaException;
-import com.challenge_fadesp.mapper.PagamentoMapper;
-import com.challenge_fadesp.model.entity.Pagamento;
-import com.challenge_fadesp.model.enums.MetodoPagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.utils.mapper.PagamentoMapper;
+import com.challenge_fadesp.domain.entity.Pagamento;
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
 import com.challenge_fadesp.services.pagamento.usecase.CriarPagamentoUseCase;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+import static com.challenge_fadesp.utils.mapper.PagamentoMapper.toEntity;
+import static com.challenge_fadesp.utils.mapper.PagamentoMapper.toResponseDTO;
+
 @Service
 public class CriarPagamentoUseCaseImpl implements CriarPagamentoUseCase {
 
   private final PagamentoRepository pagamentoRepository;
-  private final PagamentoMapper pagamentoMapper;
 
-  public CriarPagamentoUseCaseImpl(PagamentoRepository pagamentoRepository, PagamentoMapper pagamentoMapper) {
+  public CriarPagamentoUseCaseImpl(PagamentoRepository pagamentoRepository) {
     this.pagamentoRepository = pagamentoRepository;
-    this.pagamentoMapper = pagamentoMapper;
   }
 
   @Override
@@ -53,11 +54,11 @@ public class CriarPagamentoUseCaseImpl implements CriarPagamentoUseCase {
       }
     }
 
-    Pagamento pagamento = pagamentoMapper.toEntity(requestDTO);
+    Pagamento pagamento = toEntity(requestDTO);
     pagamento.setStatusPagamento(StatusPagamento.PENDENTE_PROCESSAMENTO);
     pagamento.setAtivo(true);
 
     Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
-    return pagamentoMapper.toResponseDTO(pagamentoSalvo);
+    return toResponseDTO(pagamentoSalvo);
   }
 }

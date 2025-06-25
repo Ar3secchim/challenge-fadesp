@@ -2,9 +2,9 @@ package com.challenge_fadesp.services.pagamento.impl;
 
 import com.challenge_fadesp.dtos.FiltrarPagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
-import com.challenge_fadesp.mapper.PagamentoMapper;
-import com.challenge_fadesp.model.entity.Pagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.utils.mapper.PagamentoMapper;
+import com.challenge_fadesp.domain.entity.Pagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

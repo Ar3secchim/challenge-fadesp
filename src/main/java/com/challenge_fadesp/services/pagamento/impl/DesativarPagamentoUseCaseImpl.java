@@ -3,21 +3,21 @@ package com.challenge_fadesp.services.pagamento.impl;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.exception.pagamentos.OperacaoInvalidaException;
 import com.challenge_fadesp.exception.pagamentos.PagamentoNaoEncontradoException;
-import com.challenge_fadesp.mapper.PagamentoMapper;
-import com.challenge_fadesp.model.entity.Pagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.utils.mapper.PagamentoMapper;
+import com.challenge_fadesp.domain.entity.Pagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
 import com.challenge_fadesp.services.pagamento.usecase.DesativarPagamentoUseCase;
 import org.springframework.stereotype.Service;
 
+import static com.challenge_fadesp.utils.mapper.PagamentoMapper.toResponseDTO;
+
 @Service
 public class DesativarPagamentoUseCaseImpl implements DesativarPagamentoUseCase {
   private final PagamentoRepository pagamentoRepository;
-  private final PagamentoMapper pagamentoMapper;
 
-  public DesativarPagamentoUseCaseImpl(PagamentoRepository pagamentoRepository, PagamentoMapper pagamentoMapper) {
+  public DesativarPagamentoUseCaseImpl(PagamentoRepository pagamentoRepository) {
     this.pagamentoRepository = pagamentoRepository;
-    this.pagamentoMapper = pagamentoMapper;
   }
 
   @Override
@@ -30,6 +30,6 @@ public class DesativarPagamentoUseCaseImpl implements DesativarPagamentoUseCase 
     }
 
     pagamento.setAtivo(false);
-    return pagamentoMapper.toResponseDTO(pagamentoRepository.save(pagamento));
+    return toResponseDTO(pagamentoRepository.save(pagamento));
   }
 }

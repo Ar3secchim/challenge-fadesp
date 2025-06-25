@@ -1,7 +1,7 @@
 package com.challenge_fadesp.utils;
 
-import com.challenge_fadesp.model.entity.Pagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.domain.entity.Pagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import org.springframework.data.jpa.domain.Specification;
 
 

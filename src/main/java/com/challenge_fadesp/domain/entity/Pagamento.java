@@ -1,7 +1,7 @@
-package com.challenge_fadesp.model.entity;
+package com.challenge_fadesp.domain.entity;
 
-import com.challenge_fadesp.model.enums.MetodoPagamento;
-import com.challenge_fadesp.model.enums.StatusPagamento;
+import com.challenge_fadesp.domain.enums.MetodoPagamento;
+import com.challenge_fadesp.domain.enums.StatusPagamento;
 import jakarta.persistence.*;
 import lombok.*;
 

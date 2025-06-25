@@ -1,4 +1,4 @@
-package com.challenge_fadesp.model.enums;
+package com.challenge_fadesp.domain.enums;
 
 public enum MetodoPagamento {
   BOLETO,
