@@ -3,7 +3,6 @@ package com.challenge_fadesp.services.pagamento.impl;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 import com.challenge_fadesp.exception.pagamentos.OperacaoInvalidaException;
 import com.challenge_fadesp.exception.pagamentos.PagamentoNaoEncontradoException;
-import com.challenge_fadesp.exception.pagamentos.StatusInvalidoException;
 import com.challenge_fadesp.mapper.PagamentoMapper;
 import com.challenge_fadesp.model.entity.Pagamento;
 import com.challenge_fadesp.model.enums.StatusPagamento;
@@ -18,10 +17,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AtualizarStatusPagamentoUseCaseImplTest {
+class DesativarPagamentoUseCaseImplTest {
   @Mock
   private PagamentoRepository pagamentoRepository;
 
@@ -29,7 +29,7 @@ class AtualizarStatusPagamentoUseCaseImplTest {
   private PagamentoMapper pagamentoMapper;
 
   @InjectMocks
-  private AtualizarStatusPagamentoUseCaseImpl atualizarStatusPagamentoUseCase;
+  private DesativarPagamentoUseCaseImpl desativarPagamentoUseCase;
 
   private Pagamento pagamento;
   private PagamentoResponseDTO responseDTO;
@@ -45,17 +45,15 @@ class AtualizarStatusPagamentoUseCaseImplTest {
   }
 
   @Test
-  void deveAtualizarStatusComSucesso() {
+  void deveDesativarPagamentoComSucesso() {
     when(pagamentoRepository.findById(1L)).thenReturn(Optional.of(pagamento));
     when(pagamentoRepository.save(pagamento)).thenReturn(pagamento);
     when(pagamentoMapper.toResponseDTO(pagamento)).thenReturn(responseDTO);
 
-    PagamentoResponseDTO resultado = atualizarStatusPagamentoUseCase.execute(1L, StatusPagamento.PROCESSADO_SUCESSO);
+    PagamentoResponseDTO resultado = desativarPagamentoUseCase.execute(1L);
 
     assertNotNull(resultado);
-    assertEquals(responseDTO, resultado);
-    assertEquals(StatusPagamento.PROCESSADO_SUCESSO, pagamento.getStatusPagamento());
-
+    assertFalse(pagamento.getAtivo());
     verify(pagamentoRepository).save(pagamento);
     verify(pagamentoMapper).toResponseDTO(pagamento);
   }
@@ -65,26 +63,16 @@ class AtualizarStatusPagamentoUseCaseImplTest {
     when(pagamentoRepository.findById(1L)).thenReturn(Optional.empty());
 
     assertThrows(PagamentoNaoEncontradoException.class, () ->
-      atualizarStatusPagamentoUseCase.execute(1L, StatusPagamento.PROCESSADO_SUCESSO));
+      desativarPagamentoUseCase.execute(1L));
   }
 
   @Test
-  void deveLancarExcecaoQuandoPagamentoInativo() {
-    pagamento.setAtivo(false);
+  void deveLancarExcecaoQuandoStatusNaoPermitido() {
+    pagamento.setStatusPagamento(StatusPagamento.PROCESSADO_SUCESSO);
     when(pagamentoRepository.findById(1L)).thenReturn(Optional.of(pagamento));
 
     assertThrows(OperacaoInvalidaException.class, () ->
-      atualizarStatusPagamentoUseCase.execute(1L, StatusPagamento.PROCESSADO_SUCESSO));
+      desativarPagamentoUseCase.execute(1L));
   }
 
-  @Test
-  void deveLancarExcecaoQuandoTransicaoInvalida() {
-    pagamento.setAtivo(true);
-    pagamento.setStatusPagamento(StatusPagamento.PROCESSADO_SUCESSO); // Não pode ir para FALHA
-
-    when(pagamentoRepository.findById(1L)).thenReturn(Optional.of(pagamento));
-
-    assertThrows(StatusInvalidoException.class, () ->
-      atualizarStatusPagamentoUseCase.execute(1L, StatusPagamento.PROCESSADO_FALHA));
-  }
 }

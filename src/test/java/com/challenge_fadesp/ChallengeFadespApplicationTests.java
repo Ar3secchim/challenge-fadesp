@@ -9,5 +9,4 @@ class ChallengeFadespApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

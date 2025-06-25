@@ -2,8 +2,6 @@ package com.challenge_fadesp.services.pagamento.impl;
 
 import com.challenge_fadesp.dtos.FiltrarPagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
-import com.challenge_fadesp.exception.pagamentos.OperacaoInvalidaException;
-import com.challenge_fadesp.exception.pagamentos.StatusInvalidoException;
 import com.challenge_fadesp.mapper.PagamentoMapper;
 import com.challenge_fadesp.model.entity.Pagamento;
 import com.challenge_fadesp.model.enums.StatusPagamento;
@@ -25,7 +23,6 @@ public class ListarPagamentoUseCaseImpl implements ListarPagamentosUseCase {
     this.pagamentoRepository = pagamentoRepository;
     this.pagamentoMapper = pagamentoMapper;
   }
-
 
   @Override
   public List<PagamentoResponseDTO> listarTodos() {
