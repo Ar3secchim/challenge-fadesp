@@ -45,10 +45,26 @@ src/
 ---
 
 ## ▶️ Rodando o Projeto Localmente
+### Pré-requisitos
 
+* Java 17 instalado
+* Docker e Docker Compose instalados
 
+### Rodando o projeto
 
----
+1. Clone o repositório:
+```bash
+   git clone https://github.com/Ar3secchim/challenge-fadesp.git
+   cd challenge-fadesp
+```
+
+Inicie a aplicação Spring Boot:
+    Inicia h2 e faz as migrates com o Flyway e sobe o banco de dados
+```bash
+  ./mvnw spring-boot:run
+```
+
+Acesse a documentação Swagger em: http://localhost:8080/swagger-ui.html
 
 ## 🔎 Endpoints Principais
 
@@ -100,9 +116,29 @@ Todas as decisões arquiteturais estão documentadas na pasta `docs/ADRS`:
 * `ADR-007`: Banco de Dados H2
 ---
 
-### 📚 Documentação Swagger
+## 🧪 Testes
+Os testes estão localizados na pasta `src/test/java` e cobrem:
+* Testes unitários para serviços e controllers
+* Testes de integração para endpoints REST
+* Testes de validação de regras de negócio
+* Testes de exceções e tratamento de erros
 
-Após subir a aplicação, acesse:
-[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+### 📊 Cobertura Atual: **71%** (460/645 instruções)
 
----
+### 📋 Executar Testes
+```bash
+# Executar todos os testes
+./mvnw clean test
+
+# Gerar relatório de cobertura
+./mvnw jacoco:report
+
+# Visualizar relatório
+xdg-open target/site/jacoco/index.html
+```
+
+### 📚 Documentação Completa de Testes
+* [📊 **Relatório de Cobertura**](docs/COBERTURA-TESTES.md) - Métricas detalhadas e análise
+
+
+

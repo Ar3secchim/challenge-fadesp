@@ -1,7 +1,7 @@
 # ADR-002 – Banco de Dados PostgreSQL via Docker
 
 **Data:** 21 de junho de 2025  
-**Status:** Aceito
+**Status:** Deprecioada
 
 ---
 
