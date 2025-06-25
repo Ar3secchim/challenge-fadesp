@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
+import static com.challenge_fadesp.utils.mapper.PagamentoMapper.toEntity;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -38,16 +39,16 @@ class CriarPagamentoUseCaseImplTest {
   void setUp() {
     request = new PagamentoRequestDTO(
       1,
-      "1234567890123456",
+      "12345678911",
       MetodoPagamento.PIX,
-      "1234567890123456",
-      BigDecimal.valueOf(150.00)
+      null,
+      BigDecimal.valueOf(100)
     );
 
 
     pagamento = new Pagamento();
-    pagamento.setCodigoDebito(123);
-    pagamento.setIdentificadorPagamento("12345678900");
+    pagamento.setCodigoDebito(1);
+    pagamento.setIdentificadorPagamento("12345678911");
     pagamento.setMetodoPagamento(MetodoPagamento.PIX);
     pagamento.setValorPagamento(BigDecimal.valueOf(100));
     pagamento.setNumeroCartao(null);
@@ -68,7 +69,7 @@ class CriarPagamentoUseCaseImplTest {
 
   @Test
   void deveCriarPagamentoComSucesso() {
-    when(pagamentoRepository.save(pagamento)).thenReturn(pagamento);
+    when(pagamentoRepository.save(any(Pagamento.class))).thenReturn(pagamento);
 
     PagamentoResponseDTO resultado = criarPagamentoUseCase.execute(request);
 

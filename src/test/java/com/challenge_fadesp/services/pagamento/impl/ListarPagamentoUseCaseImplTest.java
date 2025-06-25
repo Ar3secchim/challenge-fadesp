@@ -81,9 +81,9 @@ class ListarPagamentoUseCaseImplTest {
   @Test
   void deveRetornarTodosQuandoFiltroVazio() {
     FiltrarPagamentoRequestDTO filtro = new FiltrarPagamentoRequestDTO(
-      1,
-      "1234567891012",
-      StatusPagamento.PENDENTE_PROCESSAMENTO
+      null,
+      null,
+      null
     );
 
     when(pagamentoRepository.findAll()).thenReturn(List.of(pagamento));
