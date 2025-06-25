@@ -6,8 +6,9 @@ import com.challenge_fadesp.mapper.PagamentoMapper;
 import com.challenge_fadesp.model.entity.Pagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
 import com.challenge_fadesp.services.pagamento.usecase.BuscarPagamentoPorIdUseCase;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class BuscarPagamentoPorIdUseCaseImpl implements BuscarPagamentoPorIdUseCase {
 
   private final PagamentoRepository pagamentoRepository;

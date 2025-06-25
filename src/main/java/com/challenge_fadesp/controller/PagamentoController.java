@@ -1,8 +1,9 @@
 package com.challenge_fadesp.controller;
 
-import com.challenge_fadesp.dtos.AtualizarStatusDTO;
+import com.challenge_fadesp.dtos.FiltrarPagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
+import com.challenge_fadesp.dtos.StatusPagamentoRequestDTO;
 import com.challenge_fadesp.model.enums.StatusPagamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,18 +17,17 @@ import java.util.List;
 @RequestMapping("api/pagamentos")
 public class PagamentoController {
 
-  private final CriarPagamentoUseCase criarPagamentoUseCase;
   private final ListarPagamentosUseCase listarPagamentosUseCase;
   private final BuscarPagamentoPorIdUseCase buscarPagamentoUseCase;
   private final AtualizarStatusPagamentoUseCase atualizarStatusUseCase;
+  private final CriarPagamentoUseCase criarPagamentoUseCase;
   private final DesativarPagamentoUseCase desativarPagamentoUseCase;
-
 
   @Autowired
   public PagamentoController(
     CriarPagamentoUseCase criarPagamentoUseCase,
     ListarPagamentosUseCase listarPagamentosUseCase,
-    BuscarPagamentoUseCase buscarPagamentoUseCase,
+    BuscarPagamentoPorIdUseCase buscarPagamentoUseCase,
     AtualizarStatusPagamentoUseCase atualizarStatusUseCase,
     DesativarPagamentoUseCase desativarPagamentoUseCase) {
     this.criarPagamentoUseCase = criarPagamentoUseCase;
@@ -43,13 +43,9 @@ public class PagamentoController {
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
   }
 
-  @GetMapping("/filtrar-pagamentos")
-  public ResponseEntity<List<PagamentoResponseDTO>> filtrarPagamentos(
-    @RequestParam(required = false) Integer codigoDebito,
-    @RequestParam(required = false) String identificadorPagamento,
-    @RequestParam(required = false) StatusPagamento statusPagamento) {
-
-    List<PagamentoResponseDTO> pagamentos = listarPagamentosUseCase.filtrar(codigoDebito, identificadorPagamento, statusPagamento);
+  @PostMapping("/filtrar-pagamentos")
+  public ResponseEntity<List<PagamentoResponseDTO>> filtrarPagamentos(@RequestBody FiltrarPagamentoRequestDTO requestDTO) {
+    List<PagamentoResponseDTO> pagamentos = listarPagamentosUseCase.filtrar(requestDTO);
     return ResponseEntity.ok(pagamentos);
   }
 
@@ -69,8 +65,9 @@ public class PagamentoController {
   @PatchMapping("/{id}/status")
   public ResponseEntity<PagamentoResponseDTO> atualizarStatusPagamento(
     @PathVariable Long id,
-    @RequestBody StatusPagamentoRequest request) {
-    PagamentoResponseDTO pagamento = atualizarStatusUseCase.execute(id, request.getStatus());
+    @RequestBody StatusPagamentoRequestDTO request) {
+    StatusPagamento novoStatus = StatusPagamento.valueOf(request.getStatusPagamento().toUpperCase());
+    PagamentoResponseDTO pagamento = atualizarStatusUseCase.execute(id, novoStatus);
     return ResponseEntity.ok(pagamento);
   }
 

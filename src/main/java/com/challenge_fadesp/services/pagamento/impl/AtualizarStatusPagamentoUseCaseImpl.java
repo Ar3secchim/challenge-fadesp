@@ -10,8 +10,9 @@ import com.challenge_fadesp.model.enums.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
 import com.challenge_fadesp.services.pagamento.usecase.AtualizarStatusPagamentoUseCase;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class AtualizarStatusPagamentoUseCaseImpl implements AtualizarStatusPagamentoUseCase {
   private final PagamentoRepository pagamentoRepository;
   private final PagamentoMapper pagamentoMapper;
@@ -30,26 +31,11 @@ public class AtualizarStatusPagamentoUseCaseImpl implements AtualizarStatusPagam
       throw new OperacaoInvalidaException("Pagamentos inativos não podem ter seu status alterado");
     }
 
-    switch (pagamento.getStatusPagamento()) {
-      case PENDENTE_PROCESSAMENTO:
-        if (novoStatus == StatusPagamento.PROCESSADO_SUCESSO ||
-          novoStatus == StatusPagamento.PROCESSADO_FALHA) {
-          pagamento.setStatusPagamento(novoStatus);
-        } else {
-          throw new StatusInvalidoException("Um pagamento pendente só pode ser alterado para processado com sucesso ou falha");
-        }
-        break;
-      case PROCESSADO_SUCESSO:
-        throw new StatusInvalidoException("Um pagamento processado com sucesso não pode ter seu status alterado");
-      case PROCESSADO_FALHA:
-        if (novoStatus == StatusPagamento.PENDENTE_PROCESSAMENTO) {
-          pagamento.setStatusPagamento(novoStatus);
-        } else {
-          throw new StatusInvalidoException("Um pagamento processado com falha só pode ser alterado para pendente");
-        }
-        break;
+    if (!pagamento.getStatusPagamento().podeTransicionarPara(novoStatus)) {
+      throw new StatusInvalidoException("Transição não permitida.");
     }
 
+    pagamento.setStatusPagamento(novoStatus);
     return pagamentoMapper.toResponseDTO(pagamentoRepository.save(pagamento));
   }
 }

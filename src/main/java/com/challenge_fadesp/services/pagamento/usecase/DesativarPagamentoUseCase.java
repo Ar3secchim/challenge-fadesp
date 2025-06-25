@@ -1,4 +1,4 @@
-package com.challenge_fadesp.usecase.pagamento;
+package com.challenge_fadesp.services.pagamento.usecase;
 
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
 

@@ -1,8 +1,12 @@
+package com.challenge_fadesp.utils;
+
 import com.challenge_fadesp.model.entity.Pagamento;
+import com.challenge_fadesp.model.enums.StatusPagamento;
 import org.springframework.data.jpa.domain.Specification;
 
-public class PagamentoSpecification {
 
+public class PagamentoSpecification {
+  // Esta classe fornece especificações para filtrar entidades Pagamento com base em critérios.
   public static Specification<Pagamento> comCodigoDebito(Integer codigoDebito) {
     return (root, query, criteriaBuilder) ->
       codigoDebito == null ? criteriaBuilder.conjunction()

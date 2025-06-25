@@ -7,10 +7,10 @@ import com.challenge_fadesp.mapper.PagamentoMapper;
 import com.challenge_fadesp.model.entity.Pagamento;
 import com.challenge_fadesp.model.enums.StatusPagamento;
 import com.challenge_fadesp.repository.PagamentoRepository;
-import org.springframework.stereotype.Component;
-import com.challenge_fadesp.usecase.pagamento.DesativarPagamentoUseCase;
+import com.challenge_fadesp.services.pagamento.usecase.DesativarPagamentoUseCase;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class DesativarPagamentoUseCaseImpl implements DesativarPagamentoUseCase {
   private final PagamentoRepository pagamentoRepository;
   private final PagamentoMapper pagamentoMapper;
