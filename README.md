@@ -52,12 +52,14 @@ src/
 
 ## 🔎 Endpoints Principais
 
-| Método | Rota                      | Descrição                          |
-|--------|---------------------------|------------------------------------|
-| POST   | `/pagamentos`             | Criar novo pagamento               |
-| PATCH  | `/pagamentos/{id}/status` | Atualizar status do pagamento      |
-| POST   | `/pagamentos/filtro`      | Listar pagamentos com filtros      |
-| PATCH  | `/pagamentos/{id}`        | Desativar pagamento (regra lógica) |
+| Método | Rota                                | Descrição                          |
+|--------|-------------------------------------|------------------------------------|
+| POST   | `api/pagamentos`                    | Criar novo pagamento               |
+| GET    | `api/pagamentos`                    | Listar todos  pagamentos           |
+| GET    | `api/pagamentos/{id} `              | Buscar um pagamento por id         |
+| PATCH  | `api/pagamentos/{id}/status`        | Atualizar status do pagamento      |
+| POST   | `api/pagamentos/filtrar-pagamentos` | Listar pagamentos com filtros      |
+| PATCH  | `apis/pagamentos/{id}`              | Desativar pagamento (regra lógica) |
 
 ### 📥 Exemplo de payload para criação de pagamento (POST `/pagamentos`)
 
@@ -104,11 +106,3 @@ Após subir a aplicação, acesse:
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ---
-
-### 🧹 Limpando os containers Docker
-
-```bash
-docker stop pagamentos-api-container
-docker rm pagamentos-api-container
-docker-compose down
-```
