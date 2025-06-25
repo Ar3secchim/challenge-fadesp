@@ -10,8 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,15 +33,15 @@ class PagamentoControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @MockitoBean
+  @MockBean
   private CriarPagamentoUseCase criarPagamentoUseCase;
-  @MockitoBean
+  @MockBean
   private ListarPagamentosUseCase listarPagamentosUseCase;
-  @MockitoBean
+  @MockBean
   private BuscarPagamentoPorIdUseCase buscarPagamentoUseCase;
-  @MockitoBean
+  @MockBean
   private AtualizarStatusPagamentoUseCase atualizarStatusUseCase;
-  @MockitoBean
+  @MockBean
   private DesativarPagamentoUseCase desativarPagamentoUseCase;
 
 

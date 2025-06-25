@@ -1,5 +1,9 @@
 package com.challenge_fadesp.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import com.challenge_fadesp.dtos.FiltrarPagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoRequestDTO;
 import com.challenge_fadesp.dtos.PagamentoResponseDTO;
@@ -38,18 +42,32 @@ public class PagamentoController {
   }
 
   @PostMapping
+  @Operation(summary = "Criar um novo pagamento", description = "Cria um pagamento e retorna o recurso criado.")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "201", description = "Pagamento criado com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
+  })
   public ResponseEntity<PagamentoResponseDTO> criarPagamento(@RequestBody PagamentoRequestDTO requestDTO) {
     PagamentoResponseDTO responseDTO = criarPagamentoUseCase.execute(requestDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
   }
 
   @PostMapping("/filtrar-pagamentos")
+  @Operation(summary = "Filtrar pagamentos", description = "Filtra pagamentos de acordo com os critérios fornecidos.")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Pagamentos filtrados retornados com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
+  })
   public ResponseEntity<List<PagamentoResponseDTO>> filtrarPagamentos(@RequestBody FiltrarPagamentoRequestDTO requestDTO) {
     List<PagamentoResponseDTO> pagamentos = listarPagamentosUseCase.filtrar(requestDTO);
     return ResponseEntity.ok(pagamentos);
   }
 
   @GetMapping()
+  @Operation(summary = "Listar todos os pagamentos", description = "Retorna uma lista de todos os pagamentos cadastrados.")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Lista de pagamentos retornada com sucesso")
+  })
   public ResponseEntity<List<PagamentoResponseDTO>> listarPagamentos() {
     List<PagamentoResponseDTO> listaPagamentos = listarPagamentosUseCase.listarTodos();
     return ResponseEntity.ok(listaPagamentos);
@@ -57,12 +75,23 @@ public class PagamentoController {
 
 
   @GetMapping("/{id}")
+  @Operation(summary = "Buscar pagamento por ID", description = "Busca um pagamento pelo seu identificador único.")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Pagamento encontrado e retornado com sucesso"),
+    @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
+  })
   public ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(@PathVariable Long id) {
     PagamentoResponseDTO pagamento = buscarPagamentoUseCase.execute(id);
     return ResponseEntity.ok(pagamento);
   }
 
-  @PatchMapping("/{id}/status")
+  @PutMapping("/{id}/status")
+  @Operation(summary = "Atualizar status do pagamento", description = "Atualiza o status de um pagamento existente.")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Status do pagamento atualizado com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+    @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
+  })
   public ResponseEntity<PagamentoResponseDTO> atualizarStatusPagamento(
     @PathVariable Long id,
     @RequestBody StatusPagamentoRequestDTO request) {
@@ -71,7 +100,12 @@ public class PagamentoController {
     return ResponseEntity.ok(pagamento);
   }
 
-  @PatchMapping("/{id}")
+  @PutMapping("/{id}")
+  @Operation(summary = "Desativar pagamento", description = "Desativa um pagamento existente pelo seu ID.")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Pagamento desativado com sucesso"),
+    @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
+  })
   public ResponseEntity<PagamentoResponseDTO> desativarPagamento(@PathVariable Long id) {
     PagamentoResponseDTO pagamento = desativarPagamentoUseCase.execute(id);
     return ResponseEntity.ok(pagamento);
